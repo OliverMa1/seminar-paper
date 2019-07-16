@@ -1,0 +1,105 @@
+% !Tex root=main.tex
+\section{PDR}
+This section goes into detail how \sloth solves emptiness of AFA. 
+The approach of \sloth is to transform the AFA into a boolean transition system and solve reachability of states that correspond to the final states of the AFA. 
+In the case those states are not reachable in the transition system they are also not reachable in the AFA and if they are reachable in the transititon system then they are reachable in the AFA.
+There is more than one way to do the transformation efficiently and all of them can be done in linear time and space adding not any additional complexity on the problem.
+This paper discusses the simplest one which can be described as direct translation as the understanding of this method is enough to capture the overview of \sloth.
+First of all, boolean transition systems as they are introduced by Clarke et al. \cite{??}.
+Then a brief overview of exisiting methods to solve reachability in boolean transition systems is given.
+Finally, the opted method of the authors, PDR, is explained from a high-level point of view and a small example is given.
+\paragraph*{Syntax of Boolean transition systems.} A boolean transition system can be defined as a triple $T = (S, Init, R)$, where $S$ is a finite set of states, $I \subseteq S$ is the set of initial states and $R \subseteq S \times S$ is a transition relation over two copies $s, s' \in S$ of the state variables, encoding that starting in a state $s$, the transition system can go over to a state $s'$.
+The state space is usually over $\mathbb{B}$, thus the initial set of states and the transition relation can be encoded as boolean formulas which makes it possible for SAT solvers to reason about transition systems.
+\paragraph*{Direct Translation from AFA to Transition Systems} Given an AFA $\mathcal{A} = (V_n, Q, \Delta, I, F)$ with $|Q| = m$, then the AFA can be translated into a transition system $T_{\mathcal{A}} = (\mathbb{B}^m, Init, R)$. A state in the state space can be seen as a bit-vector $\bar{q} = <q_0,\dots, q_{m-1}>$ of length $m$.
+The initial states are defined as $Init = I$ and the transition relation is defined over existentially quantified input variables $V_n = \{x_0,\dots x_n\}$ and the state variables $\bar{q},\bar{q}'$ as follows:
+\begin{align*}
+R(\bar{q},\bar{q}') = \exists v_0,\dots, v_n : \bigwedge^{m-1}_{i=0} q_i \rightarrow \Delta(q_i) [\bar{q}/\bar{q}']
+\end{align*}
+Finally, in order to check emptiness of $\mathcal{A}$ it has to be shown that the transition system never reaches states that correspond to the final formula $F$, thus, $F_T = F$.
+Note, that reachability in boolean transition system can be defined in two different ways-(i) either define all states that are safe for the transition system to reach or (ii) define all the bad states that have to be avoided. 
+
+\paragraph*{Reachability in boolean transition systems}
+There are many methods that solve reachability in boolean transition system, ranging from simple fixpoint-computations to more involved algorithms like craig-interpolation \cite{??} or PDR \cite{??}.
+The idea of the fixpoint-computation is to compute all reachable states in the transition system and then check if a bad state is included in the reachable states.
+If a bad state is included, the algorithm returns with a counterexample which violates the property (e.g. never reach a set of states is a property).
+Otherwise the algorithm terminates and returns no counterexample which means the property holds on the transition system.
+In general, those transition systems can become very big and computing all reachable states can be very slow and in many practical cases not even needed.
+Thus, new methods emerged that instead of computing the set of reachable states they compute an overapproximation of the reachable states such that the property is still satisfied.
+In worst case situations those approaches still compute the reachable states, however, in many practical cases the worst case is avoided.
+The craig-interpolation method computes an overapproximation with the help of craig interpolants, while PDR just uses SAT queries and information it stored from those queries.
+The authors of \sloth decided to go with PDR, because while it is not provably faster than any other method, it usually performs better than the other methods.
+One reason might be its efficiency with using the SAT solver as it only relies on the SAT solver queries to solve the problem while craig interpolation requires computation for the interpolants in addition to querying the SAT solver.
+\paragraph*{Overview of PDR} PDR is a method to prove reachability in a boolean transition system.
+It is based on stepwise relative induction in that the states reachable in no more than $k$ steps are approximated by a formula $\psi$.
+Given a boolean transition system $T = (S, Init, R)$ with the property $P$ and a formula $s,s'$ describing the bit-vector of a state and the next states, respectively. 
+Note, that property $P$ are the negated final states if we transform an AFA to a boolean transition system.
+Then a query to the SAT solver is expressed like this:
+\begin{align*}
+SAT?[P \wedge \lnot s \wedge R \wedge s']
+\end{align*}
+This query asks if not starting in the state $s$ but in a set of states where $P$ holds and taking one step in the transition system, can you reach the state $s$?
+The set of states described by $\lnot s$ is said to be inductive relative to $P$ if the query is \textbf{UNSAT}.
+PDR uses a list of sets called \emph{trace} to store information. A trace $[R_0,\dots R_k]$ consists of $k$ sets called \emph{frames} and each of the frames represent an overapproximation of the reachable states from the initial states in $k$ steps.
+A frame $R_i$ is a set of clauses for all $i \geq 1$. 
+Looking at the conjunction of those clauses gives the set of states described by $R_i$.
+$R_0$, however, is a special case as it contains no clauses but it corresponds to the initial states.
+The frame $R_i$ is contained in any later frame $R_k$ for $k > i$ which means $R_i \rightarrow R_k$. 
+Note, however, that in terms of set of clauses, $R_k$ has \emph{less} clauses than $R_i$ since the frames are conjunctions of clauses, having more clauses means a greater restriction of the states.
+Additionally, PDR maintains a set of proof obligations.
+A proof obligation is a tuple $(s,k)$ where $s$ is a conjunction of literals describing a set of states and $k$ is an integer indicating a frame $k$. 
+Given a proof obligation $(s,k)$ PDR needs to proof that the set of states described by $s$ cannot be reached in frame $k$.
+\paragraph*{Proof obligations} In order to check those proof obligations PDR needs to check if the formula $s$ is inductive relative to $R_{k-1}$.
+This is done by following SAT query:
+\begin{align*}
+SAT[R_{k-1} \wedge \lnot s \wedge R \wedge s']
+\end{align*}
+There are two possible outcomes for the query.
+\begin{enumerate}
+\item If the SAT query is UNSAT, PDR has proofed that the set of states described by $s$ cannot be reached from frame $k-1$ in one step.
+Hence, PDR can add the clause $\lnot s$ to frame $R_k$ and all previous frames.
+Adding this clause \emph{narrows} down the frame $R_k$ to a smaller set of states. Alternatively, you can say that the set of states described by $s$ gets \emph{blocked} in frame $k$.
+The clause is added to all previous frames, because $R_i \rightarrow R_i+1$ for all $i >0$ has to hold and indeed it is sound to add the clause.
+Intuitively, proofing that the set of states described by $s$ cannot be reached in frame $k$ from frame $k-1$ also implies that $s$ cannot be reached in frame $k-1$ from frame $k-2$ and so forth.
+Finally, it has to be checked if the set of states described by $s$ is contained in the initial states with following SAT query:
+\begin{align*}
+SAT[R_0 \wedge s]
+\end{align*}
+If this query is UNSAT, we are allowed to narrow down all frames with the method above, otherwise we cannot narrow down the frames.
+\item If the SAT query is SAT, we do not immediately have a counterexample, because the frames are all overapproximations of reachable states in $k$ steps, hence, having a too big approximation can also lead to a satisfiable assignment.
+Thus, PDR found a counterexample to the induction instead of a counterexample to the property PDR tries to proof.
+In general if the query is SAT, it means that $R_{k-1}$ was not strong enough to prohibit the set of states described by $s$ to be reached, thus new facts need to be derived in frame $k-1$.
+PDR creates a new proof obligation $(m,k-1)$ to do this, where $m$ is the satisfying assignment obtained by the SAT query.
+This can result in a stack of proof obligation all the way back to frame $0$. If the proof obligation at frame $0$ fails, a counterexample to the property is obtained, otherwise PDR goes back to the original proof obligation and checks if it can be blocked now.
+\end{enumerate}
+\paragraph*{Generalization} Generalization is an important procedure in PDR which increases the performance substantially. There are many generalization methods and picking the most efficient one leads to better performances of PDR.
+The idea behind generalization is that after obtaining UNSAT from a proof obligation $(s_1,k)$, the conjunction of literals $s_1$ is transformed into a conjunction of literals $s_2$ such that the proof obligation $(s_2,k)$ still returns UNSAT.
+One simple approach is to enumerate all possible subformulas by dropping literals from the conjunction and checking all proof obligations obtained by that and picking the formula that captures the biggest set of states.
+Note, that this approach is not used in PDR as it is too inefficient.
+Due to its simplicity this paper applies this form of generalization in Example  and for other forms of generalizations we refer to the paper from Mishchenko et al. \cite{??}.
+\subsection{Struktur}
+\begin{enumerate}
+\item explain frame structur R-0,R-n
+\item figure for frames
+\item explain the unsat mechanic and generalization
+\item explain the recursive blocks
+\item give inductive property mainted by algo????
+\item example
+\end{enumerate}
+\subsection{PDR}
+\begin{enumerate}
+\item start of with general overview of pdr, check the paper
+\item cover the base cases including generalization
+\item do one example for pdr
+\item conclude with pdr strenghts and important things (fast sat solver and good generalization) 
+\item mention transformation from AFA to transition systemS????????????? :(
+\item mention usage of transition relation maybe, and problematics with exponential blow up
+\end{enumerate}
+\subsection{Vorgehen}
+\begin{enumerate}
+\item look at phd thesis for their introduction
+\item intro von pdr
+\item intro von schneider?
+\item def von?
+\item high level beispiel von phd?
+\item low level maybe?
+\end{enumerate}

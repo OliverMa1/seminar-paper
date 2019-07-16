@@ -1,0 +1,33 @@
+% !Tex root=main.tex
+
+\section{Introduction}
+\label{sec:intro}
+Most programming languages enables the usage of strings and they are fundamental in many scripting languages, thus, reasoning automatically about series of string manipulation is a good way to avoid any programming errors.
+In some applications such errors can lead to critical security breaches, e.g. cross-site scripting.
+However, reasoning automatically about programs that employ series of string manipulation is not easy and one way how to reason about those programs are string solvers.
+Thus, in the recent years many string solvers have been proposed. ~\cite{??}
+
+
+A common approach in constraint solving is to use Satisfiability Modulo Theories (SMT) ~\cite{??} which combines the speed of modern SAT solvers with the expressiveness of theory solvers. 
+String solvers can be seen as a theory solver in such a framework.
+String solvers are able to reason over formulas over the theory of strings, however, one downside of the general theory of strings is the undecidability of this theory.
+Allowing concatenation of strings is already enough to make the theory of strings undecidable. ~\cite{??}
+Many modern String solver, however, reason about string constraints from the general theory of strings, without any decidability guarantee.
+The authors of \sloth (\textbf{S}tring \textbf{LO}gic \textbf{TH}eory solver) restrict the string constraints their tool is able to solve to the straight-line fragment of strings.~\cite{??}
+It has been shown that restricting the theory of strings to the straight-line fragment makes string solving decidable.
+The authors also illustrate that the restriction still allows reasoning for many practical applications.
+One drawback from using the straight-line fragment is the worst-case complexity
+of the theory (double-exponential time). 
+This is an unavoidable blow-up as deciding the straight-line fragment is EXPSPACE-complete~\cite{??}, however, the authors of \sloth employ a series of clever transformations to avoid this blow-up for many practical cases.
+
+\sloth starts off with a string constraint in the straight-line fragment, translates the constraint into the acyclic fragment, then transforms the resulting formula to an alternating finite automata as an intermediate step for computation. Finally, the automata is transformed into a boolean transition system. Checking the property given by the automata in this boolean transition system yields an answer for the original string constraint.
+
+The focus of this paper is to explain the alternating automata used in the paper and the method PDR (property directed reachability ~\cite{??}) which is used to solve boolean reachability in the transition system. This paper addresses some of the design decisions the authors made and compares them to other possible solutions on a high level view.
+
+First of, the paper introduces the preliminaries to the theory of strings and explains shortly what the straight-line fragment is. The next section goes deeper into the computational models used by SLOTH, namely, alternating finite automata where the syntax is given formally and the semantics explained on a small example. 
+Finally, boolean transition systems are introduced and PDR is explained on a high level example.
+
+
+
+
+

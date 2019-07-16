@@ -1,0 +1,147 @@
+\RequirePackage[l2tabu, orthodox]{nag} % Do not remove
+
+\documentclass[letterpaper, 10pt, conference]{IEEEtran}
+
+%========== Packages ==========
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{microtype}
+\usepackage{mathtools}
+\usepackage{amssymb}
+\usepackage[all, nodollardollar]{onlyamsmath}
+\usepackage[inline]{enumitem}
+\usepackage{xspace}
+\usepackage[algoruled,linesnumbered]{algorithm2e}
+\usepackage{subcaption}
+\usepackage{pgfplots}
+\usepackage{pgfplotstable}
+\usepackage{booktabs}
+\usepackage{subcaption}
+\usepackage{colortbl}
+\usepackage{tikz}
+\usepackage{listings}
+\usetikzlibrary{patterns}
+\usepackage{wrapfig}
+\usepackage[hidelinks]{hyperref}
+\usepackage{color}
+\definecolor{lightgray}{rgb}{.9,.9,.9}
+\definecolor{darkgray}{rgb}{.4,.4,.4}
+\definecolor{purple}{rgb}{0.65, 0.12, 0.82}
+\usepackage{amsthm}
+\lstdefinelanguage{JavaScript}{
+  keywords={typeof, new, true, false, catch, function, return, null, catch, switch, var, if, in, while, do, else, case, break},
+  keywordstyle=\color{blue}\bfseries,
+  ndkeywords={class, export, boolean, throw, implements, import, this},
+  ndkeywordstyle=\color{darkgray}\bfseries,
+  identifierstyle=\color{black},
+  sensitive=false,
+  comment=[l]{//},
+  morecomment=[s]{/*}{*/},
+  commentstyle=\color{purple}\ttfamily,
+  stringstyle=\color{red}\ttfamily,
+  morestring=[b]',
+  morestring=[b]"
+}
+
+\lstset{
+   language=JavaScript,
+   backgroundcolor=\color{lightgray},
+   extendedchars=true,
+   basicstyle=\footnotesize\ttfamily,
+   showstringspaces=false,
+   showspaces=false,
+   numbers=left,
+   numberstyle=\footnotesize,
+   numbersep=9pt,
+   tabsize=2,
+   breaklines=true,
+   showtabs=false,
+   captionpos=b
+}
+
+%========== TikZ setup ==========
+\usepackage{tikz}
+\usetikzlibrary{automata, positioning, arrows}
+\usetikzlibrary{arrows}
+\tikzset{auto}
+\tikzset{shorten >=1pt, >=stealth}
+\usetikzlibrary{calc,patterns,angles,quotes}
+
+%========== Macros ==========
+\newcommand{\nat}{\mathbb N}
+
+\newcommand{\sloth}{\emph{SLOTH}~}
+\newcommand{\playerb}{Player~$1$}
+\newcommand{\playeri}{Player~$i$}
+
+\newcommand{\Pos}{\mathit{Pos}}
+\newcommand{\Neg}{\mathit{Neg}}
+\newcommand{\Ex}{\mathit{Ex}}
+\newcommand{\Un}{\mathit{Un}}
+
+\newcommand{\exampleend}{\hfill\tikz[baseline] \draw (0, 0) -| ++(1ex, 1.25ex);}
+
+\newtheorem{definition}{Definition}
+\newtheorem{example}{Example}
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}{Lemma}
+
+%========== Document begins here ==========
+\begin{document}
+
+
+%---------- Title ----------
+\title{Report on the String solver SLOTH}
+%\titlerunning{Abbreviated paper title}
+
+%---------- Authors ----------
+\author{
+\IEEEauthorblockN{Oliver Markgraf}
+\IEEEauthorblockA{Technical University of Kaiserslautern \\
+Kaiserslautern, Germany}}
+
+%----------Institute ----------
+
+
+%---------- Title ----------
+\maketitle
+
+% The tool implements a series of transformations. SLOTH starts off with a string constraint in the straight-line fragment, translates the constraint into the acyclic fragment, then transforms the resulting formula to an alternating finite automata as an intermediate step for computation. Finally, the automata is transformed into a boolean transition system. Checking the property given by the automata in this boolean transition system yields an answer for the original string constraint.
+
+%---------- Abstract ----------
+\begin{abstract}
+String solver have many uses in practice. For instance automatic test-case generation or reasoning about cross-site scripting vulnerabilities in web applications. The theory of strings is in general an undecidable theory, however, it is possible to look at decidable fragments of this theory such as the straight-line fragment. Restricting strings to this fragment brings other challenges such as a worst case which is double-exponential in time. \sloth is a string solver which solves string constraints in the straight-line fragment. The tool implements a series of transformations to avoid the double-exponential worst case in practical cases. This paper gives an overview of the transformations used in \sloth and an insight into alternating finite automata and their opted method to solve reachability in boolean transitions system, namely property directed reachability.
+
+
+\end{abstract}
+
+
+%---------- Introduction ----------
+\input{intro}
+
+
+%---------- Controller Synthesis and Safety Games ----------
+\input{preliminaries}
+
+%---------- A Machine Learning Framework for Synthesizing Safety Controllers ----------
+\input{afa}
+
+%---------- Decision Tree Learner ----------
+\input{pdr}
+
+%---------- Decision Tree Learner ----------
+\input{overview}
+
+%---------- Experimental Evaluation ----------
+\input{relatedwork}
+
+%---------- Conclusion ----------
+\input{conclusion}
+
+%---------- Bibliography ----------
+%\bibliographystyle{splncs04}
+%\bibliography{bib}
+
+
+
+\end{document}

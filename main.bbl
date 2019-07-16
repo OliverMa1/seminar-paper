@@ -1,0 +1,128 @@
+\begin{thebibliography}{10}
+\providecommand{\url}[1]{\texttt{#1}}
+\providecommand{\urlprefix}{URL }
+\providecommand{\doi}[1]{https://doi.org/#1}
+
+\bibitem{DBLP:conf/popl/BeyeneCPR14}
+Beyene, T.A., Chaudhuri, S., Popeea, C., Rybalchenko, A.: A constraint-based
+  approach to solving games on infinite graphs. In: The 41st Annual {ACM}
+  {SIGPLAN-SIGACT} Symposium on Principles of Programming Languages, {POPL}
+  '14, San Diego, CA, USA, January 20-21, 2014. pp. 221--234. {ACM} (2014)
+
+\bibitem{DBLP:conf/tacas/BrazdilCKT18}
+Br{\'{a}}zdil, T., Chatterjee, K., Kret{\'{\i}}nsk{\'{y}}, J., Toman, V.:
+  Strategy representation by decision trees in reactive synthesis. In: Tools
+  and Algorithms for the Construction and Analysis of Systems - 24th
+  International Conference, {TACAS} 2018, Held as Part of the European Joint
+  Conferences on Theory and Practice of Software, {ETAPS} 2018, Thessaloniki,
+  Greece, April 14-20, 2018, Proceedings, Part {I}. Lecture Notes in Computer
+  Science, vol. 10805, pp. 385--407. Springer (2018)
+
+\bibitem{DBLP:conf/tacas/ChampionC0S18}
+Champion, A., Chiba, T., Kobayashi, N., Sato, R.: Ice-based refinement type
+  discovery for higher-order functional programs. In: Tools and Algorithms for
+  the Construction and Analysis of Systems ({TACAS}). LNCS, vol. 10805, pp.
+  365--384. Springer (2018)
+
+\bibitem{DBLP:conf/tacas/ChengKLB11}
+Cheng, C., Knoll, A., Luttenberger, M., Buckl, C.: {GAVS+:} an open platform
+  for the research of algorithmic game solving. In: Tools and Algorithms for
+  the Construction and Analysis of Systems - 17th International Conference,
+  {TACAS} 2011, Held as Part of the Joint European Conferences on Theory and
+  Practice of Software, ETAPS 2011, Saarbr{\"{u}}cken, Germany, March 26-April
+  3, 2011. Proceedings. Lecture Notes in Computer Science, vol.~6605, pp.
+  258--261. Springer (2011)
+
+\bibitem{DBLP:conf/icse/DwyerAC99}
+Dwyer, M.B., Avrunin, G.S., Corbett, J.C.: Patterns in property specifications
+  for finite-state verification. In: Proceedings of the 1999 International
+  Conference on Software Engineering, ICSE' 99, Los Angeles, CA, USA, May
+  16-22, 1999. pp. 411--420. {ACM} (1999)
+
+\bibitem{DBLP:journals/pacmpl/EzudheenND0M18}
+Ezudheen, P., Neider, D., D'Souza, D., Garg, P., Madhusudan, P.: Horn-ice
+  learning for synthesizing invariants and contracts. {PACMPL}
+  \textbf{2}({OOPSLA}),  131:1--131:25 (2018)
+
+\bibitem{DBLP:conf/fm/FlanaganL01}
+Flanagan, C., Leino, K.R.M.: Houdini, an annotation assistant for esc/java. In:
+  {FME} 2001: Formal Methods for Increasing Software Productivity. LNCS,
+  vol.~2021, pp. 500--517. Springer (2001)
+
+\bibitem{DBLP:conf/cav/0001LMN14}
+Garg, P., L{\"{o}}ding, C., Madhusudan, P., Neider, D.: {ICE:} {A} robust
+  framework for learning invariants. In: Computer Aided Verification ({CAV}).
+  LNCS, vol.~8559, pp. 69--87. Springer (2014)
+
+\bibitem{DBLP:conf/popl/0001NMR16}
+Garg, P., Neider, D., Madhusudan, P., Roth, D.: Learning invariants using
+  decision trees and implication counterexamples. In: {ACM} {SIGPLAN-SIGACT}
+  Symposium on Principles of Programming Languages ({POPL}). pp. 499--512.
+  {ACM} (2016)
+
+\bibitem{DBLP:conf/dagstuhl/2001automata}
+Gr{\"{a}}del, E., Thomas, W., Wilke, T. (eds.): Automata, Logics, and Infinite
+  Games: {A} Guide to Current Research [outcome of a Dagstuhl seminar, February
+  2001], Lecture Notes in Computer Science, vol.~2500. Springer (2002)
+
+\bibitem{DBLP:conf/birthday/KupfermanPV10}
+Kupferman, O., Piterman, N., Vardi, M.Y.: An automata-theoretic approach to
+  infinite-state systems. In: Time for Verification, Essays in Memory of Amir
+  Pnueli. vol.~6200, pp. 202--259. Springer (2010)
+
+\bibitem{DBLP:conf/tacas/LodingMN16}
+L{\"{o}}ding, C., Madhusudan, P., Neider, D.: Abstract learning frameworks for
+  synthesis. In: Tools and Algorithms for the Construction and Analysis of
+  Systems ({TACAS}). LNCS, vol.~9636, pp. 167--185. Springer (2016)
+
+\bibitem{DBLP:journals/apal/McNaughton93}
+McNaughton, R.: Infinite games played on finite graphs. Ann. Pure Appl. Logic
+  \textbf{65}(2),  149--184 (1993)
+
+\bibitem{DBLP:conf/tacas/MouraB08}
+de~Moura, L.M., Bj{\o}rner, N.: {Z3:} an efficient {SMT} solver. In: Tools and
+  Algorithms for the Construction and Analysis of Systems, 14th International
+  Conference, {TACAS} 2008, Held as Part of the Joint European Conferences on
+  Theory and Practice of Software, {ETAPS} 2008, Budapest, Hungary, March
+  29-April 6, 2008. Proceedings. Lecture Notes in Computer Science, vol.~4963,
+  pp. 337--340. Springer (2008)
+
+\bibitem{DBLP:conf/wia/Neider10}
+Neider, D.: Reachability games on automatic graphs. In: Implementation and
+  Application of Automata - 15th International Conference, {CIAA} 2010,
+  Winnipeg, MB, Canada, August 12-15, 2010. Revised Selected Papers. Lecture
+  Notes in Computer Science, vol.~6482, pp. 222--230. Springer (2010)
+
+\bibitem{DBLP:conf/atva/Neider11}
+Neider, D.: Small strategies for safety games. In: Automated Technology for
+  Verification and Analysis, 9th International Symposium, {ATVA} 2011, Taipei,
+  Taiwan, October 11-14, 2011. Proceedings. Lecture Notes in Computer Science,
+  vol.~6996, pp. 306--320. Springer (2011)
+
+\bibitem{DBLP:conf/tacas/NeiderT16}
+Neider, D., Topcu, U.: An automaton learning approach to solving safety games
+  over infinite graphs. In: Tools and Algorithms for the Construction and
+  Analysis of Systems ({TACAS}). LNCS, vol.~9636, pp. 204--221. Springer (2016)
+
+\bibitem{DBLP:books/mk/Quinlan93}
+Quinlan, J.R.: {C4.5:} Programs for Machine Learning. Morgan Kaufmann (1993)
+
+\bibitem{DBLP:conf/aplas/Solar-Lezama09}
+Solar{-}Lezama, A.: The sketching approach to program synthesis. In:
+  Programming Languages and Systems, 7th Asian Symposium, {APLAS} 2009, Seoul,
+  Korea, December 14-16, 2009. Proceedings. Lecture Notes in Computer Science,
+  vol.~5904, pp. 4--13. Springer (2009)
+
+\bibitem{DBLP:conf/hybrid/WongpiromsarnTOXM11}
+Wongpiromsarn, T., Topcu, U., Ozay, N., Xu, H., Murray, R.M.: Tulip: a software
+  toolbox for receding horizon temporal logic planning. In: Proceedings of the
+  14th {ACM} International Conference on Hybrid Systems: Computation and
+  Control, {HSCC} 2011, Chicago, IL, USA, April 12-14, 2011. pp. 313--314.
+  {ACM} (2011)
+
+\bibitem{DBLP:conf/pldi/ZhuMJ18}
+Zhu, H., Magill, S., Jagannathan, S.: A data-driven {CHC} solver. In: {ACM}
+  {SIGPLAN} Conference on Programming Language Design and Implementation
+  ({PLDI}). pp. 707--721. {ACM} (2018)
+
+\end{thebibliography}

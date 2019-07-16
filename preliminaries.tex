@@ -1,0 +1,73 @@
+% !Tex root=main.tex
+
+\section{Theory of strings and the straight-line fragment}
+\label{sec:preliminaries}
+
+This section introduces the theory of strings and gives an example on how such string constraints can look like and how they relate to practical applications.
+This paper follows the definition of the theory of strings as introduced in ~\cite{??}
+
+
+%---------- Basic Notations ----------
+\paragraph*{\bfseries Basic Notations.}
+Let $\Sigma$ be a finite alphabet. $\Sigma^*$ is the set of finite words over $\Sigma$, and $\epsilon$ is the empty word. The concatenation of strings $u$, $v$ is denoted by $ v \circ  w$, written short as $vw$. For a word $w \in \Sigma^*$, $| w |$ denotes the length of $w$. 
+For any word $w = a_1 ... a_n$, we denote by $w[i]$ the letter $a_i$.
+
+\paragraph{Regular languages.}A regular language over a finite alphabet $\Sigma$ is a subset of $\Sigma*$ and can be built as follows. 
+The empty language $\emptyset$ is a regular language.
+For each $a \in Sigma$, $\{a\}$ is a regular language.
+For two regular languages $A,B$, application of the operations of concatenation, union and Kleene star yields a regular language.
+\paragraph{Rational relations.} An $n$-ary relation $R$ over a finite alphabet $\Sigma$ is a subset of $(\Sigma^*)^n$ which can be seen as an $n$-tuple over the alphabet of a regular language. A word $(w_1,\dots,w_n)$ is in $R$ if and only if $(a_1^1,\dots,a_n^1),\dots, (a_1^k,\dots,a_n^k) \in L$, and $w_i = a_1 \circ \dots \circ a_k$ with $k$ denoting the length of the word $w_i$.
+
+\paragraph{String language.} String constraints are defined over a finite alphabet $\Sigma$ and a finite set of variables over $\Sigma*$.
+The syntax of a formula $\phi$ is given in Figure \ref{fig:syntax-string}.
+
+\begin{figure}
+\begin{align*}
+\phi &\Coloneqq x = t \mid P(x) \mid \mathcal{R}(\bar{x}) \mid \phi \wedge \phi \mid \phi \vee \phi \mid \lnot \phi \\
+t &\Coloneqq x \mid a \mid t \circ t
+\end{align*}
+\caption{Syntax of string formulas}
+\label{fig:syntax-string}
+\end{figure}
+The formula $\phi$ is a Boolean combinations of formulas of \emph{word equations} $x = t$, \emph{regular constraints} $P(x)$ and \emph{rational constraints} $\mathcal{R}(\bar{x})$ where $x$ is a string variable, $\bar{x}$ is a vector of string variables, and $a \in \Sigma$.
+$P(x)$ is a regular language membership query and $\mathcal{R}(\bar{x})$ is a rational relation membership query with $P \subseteq \Sigma^*$ and $\mathcal{R}\subseteq (\Sigma^*)^n$.
+The regular languages will be represented by alternating finite automata and the rational constraints by alternating finite transducers.
+
+A formula $\phi$ is satisfiable if and only if there is an \emph{assignment} $\nu : var(\phi) \mapsto \Sigma^*$ such that $\nu$ satisfies $\phi$, otherwise the formula is unsatisfiable.
+
+\begin{example}\label{example:pre}
+Consider following Javascript snippet from Hol\'{i}k et al. ~\cite{??}
+\begin{lstlisting}*[caption=My Javascript Example]
+var x = goog.string.htmlEscape(name);
+var y = goog.string.escapeString(x);
+nameElem.innerHTML = '<button onclick= "viewPerson(\'' + y + '\')">' + x + '</button>';
+\end{lstlisting}
+
+The code assigns an HTML markup for a button to the element \texttt{nameElem}.
+When clicking on the button, the function \texttt{viewPerson} gets called with the input \texttt{y}. The variable \texttt{y} is a sanitization of the input \texttt{name} which is done by using \texttt{htmlEscape} and \texttt{escapeString}.
+The code can be expressed as a string formula as follows:
+\begin{align*}
+x = \mathcal{R}_1(name) \wedge y = \mathcal{R}_2(x) \wedge z = w_1 \circ y \circ w_2 \circ x \circ w_3 \wedge u = \mathcal{R}_3(z)
+\end{align*}
+
+Note that a rational constraint $\mathcal{R}(x,y)$ can also be written as $x = \mathcal{R}(y)$. 
+Furthermore, $name,\;x,\; y,\; z$ and $u$ are variables of the string formula. 
+$\mathcal{R}_1$ is a rational constraints which corresponds to the \texttt{htmlEscape} method, $\mathcal{R}_2$ corresponds to the \texttt{escapeString} method, and $\mathcal{R}_3$ corresponds to an implicit transduction that HTML does when calling \texttt{innerHTML}.
+The concatenation consists of the constants $w_1, \; w_2$ and $w_3$ which encode the constant strings used in line 3 and are concatenated with $y$ and $x$.
+For checking if this string formula accepts any malicious inputs, another regular constraint $\mathcal{P}(z)$ would need to be concatenated which contains all malicious inputs.
+If the formula is satisfiable we found a malicious input, if it is unsatisfiable we proofed that the our program accepts no malicious inputs.
+Thus, for the rest of the paper we are interested in showing that formulas are unsatisfiable.
+
+\end{example} 
+
+\paragraph*{Straight-line fragment.} Informally you can describe formulas in the straight-line fragment as formulas that disallow branches and loops. 
+Formally, a straight-line conjunction is a string constraint which can be written as $\phi \wedge \bigwedge^m_{i=1} x_i = P_i$.
+The formula $\phi$ is a conjunction of regular and negated regular constraints.
+The $P_i$ are either rational constraints of the form $\mathcal{R}(y)$ or concatenations $y_1 \circ \dots \circ y_n$ and  $P_i$ cannot contain the variables $x_i,\dots x_m$.
+A formula is in the straight-line fragment if every clause in its disjunctive normal form is a straight-line conjunction.
+
+Example \ref{example:pre} is a formula in the straight-line fragment.
+Note that the rational constraints here are binary and do not allow $n$-ary relations.
+The first step that \sloth does is translate a straight-line formula into a formula that is in the acyclic fragment.
+This report will not go into further detail on how this transformations works, however, this is the first source of exponential blow up which cannot be avoided as the straight-line fragment is EXSPACE-complete and the acyclic fragment is PSPACE-complete.
+
